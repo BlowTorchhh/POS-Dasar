@@ -40,13 +40,14 @@
                     <strong>Rekap Laporan Pengeluaran</strong>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ url('laporan-keluar/pdf') }}" target="_blank" class="btn btn-info btn-sm">
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#mediumModal">
                         <i class="fa fa-file"></i> Export PDF
-                    </a>
+                    </button>
+                    
                 </div>
             </div>
             <div class="card-body table-responsive">
-                <table class="table table-bordered">
+                <table id="bootstrap-data-table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -76,10 +77,54 @@
                     @endforeach
                     </tbody>
                 </table>    
+                {{ $data->links() }}
             </div>
         </div>
     </div>
         
 </div> <!-- .content -->
-
+<div class="modal fade" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mediumModalLabel">Masukkan Tanggal yang dicari</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('laporan-keluar') }}" method="POST" target="_blank">
+                    @csrf
+                    <div class="form-group">
+                        <label >Tanggal Awal</label>
+                        <input class="form-control" type="date" name="awal" required>
+                        <label >Tanggal Akhir</label>
+                        <input class="form-control" type="date" name="akhir" required>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary" ><i class="fa fa-file"></i> Export PDF</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+{{-- <script src="{{ asset('style/assets/js/popper.min.js') }}"></script> --}}
+<script src="{{ asset('style/assets/js/lib/data-table/datatables.min.js') }}"></script>
+<script src="{{ asset('style/assets/js/lib/data-table/dataTables.bootstrap.min.js') }}"></script>
+{{-- <script src="{{ asset('style/assets/js/lib/data-table/dataTables.buttons.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('style/assets/js/lib/data-table/buttons.bootstrap.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('style/assets/js/lib/data-table/jszip.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('style/assets/js/lib/data-table/pdfmake.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('style/assets/js/lib/data-table/vfs_fonts.js') }}"></script> --}}
+{{-- <script src="{{ asset('style/assets/js/lib/data-table/buttons.html5.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('style/assets/js/lib/data-table/buttons.print.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('style/assets/js/lib/data-table/buttons.colVis.min.js') }}"></script> --}}
+<script src="{{ asset('style/assets/js/lib/data-table/datatables-init.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+$('#bootstrap-data-table-export').DataTable();
+} );
+</script>
 @endsection

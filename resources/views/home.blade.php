@@ -1,6 +1,15 @@
 @extends('main')
 @section('tittle', 'Dashboard')
 
+@section('head')
+    <style>
+        .tengah{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+@endsection
+
 @section('breadcrumbs')
 <div class="breadcrumbs">
     <div class="col-sm-4">
@@ -27,43 +36,7 @@
 <div class="content mt-3">
 
     <div class="animated fadeIn">
-       
-            
-        @if (auth()->user()->level == "1")
-        <div class="col-sm-6 col-lg-3">
-            <div class="card text-white bg-flat-color-1">
-                <div class="card-body pb-0">
-                    <h4 class="mb-0">
-                        <span class="count">{{ $pengguna }}</span>
-                    </h4>
-                    <a class="text-light" href="#">Jumlah data user</a>
-                    <div class="chart-wrapper px-0" style="height:70px;" height="70">
-                        <canvas id="widgetChart2"></canvas>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        @endif
-        <div class="col-sm-6 col-lg-3">
-            <div class="card text-white bg-flat-color-2">
-                <div class="card-body pb-0">
-                    <h4 class="mb-0">
-                        <span class="count">{{ $kategori }}</span>
-                    </h4>
-                    @if (auth()->user()->level == "1")
-                    <a class="text-light"  href="/kategori/kategori">Data Kategori</a>
-                    @endif
-                    @if (auth()->user()->level == "2")
-                    <p class="text-light" >Data Kategori</p>
-                    @endif
-                    <div class="chart-wrapper px-0" style="height:70px;" height="70">
-                        <canvas id="widgetChart2"></canvas>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <div class="tengah">
         <div class="col-sm-6 col-lg-3">
             <div class="card text-white bg-flat-color-3">
                 <div class="card-body pb-0">
@@ -122,9 +95,70 @@
                 </div>
             </div>
         </div>
+        
+    </div>
+    </div>
+    <div class="content" id="chartData">
 
     </div>
         
 </div> <!-- .content -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+    Highcharts.setOptions({
+    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+        return {
+            radialGradient: {
+                cx: 0.5,
+                cy: 0.3,
+                r: 0.7
+            },
+            stops: [
+                [0, color],
+                [1, Highcharts.color(color).brighten(-0.3).get('rgb')] // darken
+            ]
+        };
+    })
+});
 
+// Build the chart
+Highcharts.chart('chartData', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Jumlah semua data'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                connectorColor: 'silver'
+            }
+        }
+    },
+    series: [{
+        name: 'Data',
+        data: [
+            { name: 'Produk', y: {{ $produk }} ,color: 'orange'},
+            { name: 'Barang Masuk', y: {{ $barangmasuk }}, color: '#FB475E'},
+            { name: 'Pengeluaran', y: {{ $pengeluaran }}, color: '#6EBD6D'},
+        ]
+    }]
+});
+</script>
 @endsection

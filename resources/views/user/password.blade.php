@@ -1,34 +1,43 @@
-@extends('app')
+@extends('main')
 @section('content')
-<div class="row">
-    <div class="col-md-6">
-        @if(session('success'))
-        <p class="alert alert-success">{{ session('success') }}</p>
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            @if (session('status'))
+        <div class="col-sm-12">
+            <div class="alert  alert-success alert-dismissible fade show" role="alert">
+                <span class="badge badge-pill badge-success"></span> {{ session('status') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
         @endif
-        @if($errors->any())
-        @foreach($errors->all() as $err)
-        <p class="alert alert-danger">{{ $err }}</p>
-        @endforeach
-        @endif
-        <form action="{{ route('password.action') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label>Password <span class="text-danger">*</span></label>
-                <input class="form-control" type="password" name="old_password" />
+            <div class="card">
+                <div class="card-header">
+                    <div class="pull-left">
+                        <strong>Profil</strong>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 offset-md-4">
+                                <div class="form-group">
+                                    <label>Nama</label>
+                                    <input type="text" class="form-control" readonly value="{{ Auth::user()->name }}" >
+                                </div>
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text"  class="form-control" readonly value="{{ Auth::user()->username }}" >
+                                </div>
+                                <a href="{{ 'edit' }}" class="btn btn-primary">Edit Nama / Username</a>
+                                <div class="mt-4">
+                                    <a href="{{ 'pw' }}" class="btn btn-primary">Edit Password</a>
+                                </div>
+                                
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label>New Password <span class="text-danger">*</span></label>
-                <input class="form-control" type="password" name="new_password" />
-            </div>
-            <div class="mb-3">
-                <label>New Password Confirmation<span class="text-danger">*</span></label>
-                <input class="form-control" type="password" name="new_password_confirmation" />
-            </div>
-            <div class="mb-3">
-                <button class="btn btn-primary">Change</button>
-                <a class="btn btn-danger" href="{{ route('home') }}">Back</a>
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 @endsection

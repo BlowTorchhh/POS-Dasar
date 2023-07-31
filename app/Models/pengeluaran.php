@@ -13,7 +13,7 @@ class pengeluaran extends Model
     protected $table = 'pengeluaran';
     protected $primaryKey = "id";
     protected $fillable = [
-        'id','tanggal','produk_id','jumlah_keluar','harga'
+        'id','tanggal','produk_id','jumlah_keluar','harga','total'
     ];
     public function produk(){
         return $this->belongsTo(produk::class);

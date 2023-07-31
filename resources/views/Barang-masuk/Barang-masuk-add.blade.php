@@ -1,4 +1,9 @@
 @extends('main')
+@section('head')
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+@endsection
+
 @section('tittle', 'Dashboard')
 
 @section('breadcrumbs')
@@ -27,7 +32,16 @@
 <div class="content mt-3">
 
     <div class="animated fadeIn">
-
+        @if (session('error'))
+        <div class="col-sm-12">
+            <div class="alert  alert-danger alert-dismissible fade show" role="alert">
+                <span class="badge badge-pill badge-success"></span> {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        @endif
 
         <div class="card">
             <div class="card-header">
@@ -51,13 +65,13 @@
                             </div>
                             <div class="row form-group">
                                 <div class="col-12 col-md-9">
-                                    <label>Pilih Produk</label>
-                                    <select name="produk_id" id="select" class="form-control">
+                                    <label>Pilih Produk dan Merknya</label>
+                                <select name="produk_id" id="select" class="form-control chosen" autofocus required>
+                                    <option value="disabled value" hidden style="display: none">(Produk , Merk)</option>
                                     @foreach ($pro as $item)
-                                        <option value="disabled value" hidden>Pilih Produk</option>
-                                    <option value="{{$item->id}}">{{ $item->nama_produk }}</option>
-                                @endforeach
-                            </select> 
+                                        <option value="{{$item->id}}">{{ $item->nama_produk.(" , ").$item->merk }}</option>
+                                    @endforeach
+                                </select> 
                                 </div>
                             </div>
                             <div class="form-group">
@@ -73,5 +87,11 @@
     </div>
         
 </div> <!-- .content -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+<script >
+    $(".chosen").chosen();
+</script>
 
 @endsection

@@ -27,7 +27,16 @@
 <div class="content mt-3">
 
     <div class="animated fadeIn">
-
+        @if (session('error'))
+        <div class="col-sm-12">
+            <div class="alert  alert-danger alert-dismissible fade show" role="alert">
+                <span class="badge badge-pill badge-success"></span> {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        @endif
 
         <div class="card">
             <div class="card-header">
@@ -43,7 +52,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 offset-md-4">
-                        <form action="{{ url('pengeluaran', $pengeluaran->id)}}" method="POST">
+                        <form action="{{ url('pengeluaran', $pengeluaran->id) }}" method="POST">
                             @method('patch')
                             @csrf
                             <div class="form-group">

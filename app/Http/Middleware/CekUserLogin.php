@@ -25,6 +25,6 @@ class CekUserLogin
         if($user->level == $rules){
             return $next($request);
         }
-        return redirect('/notfound')->with('error', 'Kamu tidak ada akses');
+        return redirect('user');
     }
 }

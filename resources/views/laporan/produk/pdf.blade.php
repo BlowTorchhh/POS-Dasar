@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title class="text-center">Laporan Kategori</title>
+    <title class="text-center">Laporan Produk</title>
 </head>
 <body>
     <h3 class="text-center" align="center">LAPORAN PRODUK</h3>

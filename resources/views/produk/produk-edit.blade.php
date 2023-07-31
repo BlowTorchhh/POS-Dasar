@@ -27,8 +27,25 @@
 <div class="content mt-3">
 
     <div class="animated fadeIn">
-
-
+        @if($errors->any())
+        @foreach($errors->all() as $err)
+        <p class="alert alert-danger">{{ $err }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </p>
+        @endforeach
+        @endif
+        @if (session('error'))
+        <div class="col-sm-12">
+            <div class="alert  alert-danger alert-dismissible fade show" role="alert">
+                <span class="badge badge-pill badge-success"></span> {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        @endif
         <div class="card">
             <div class="card-header">
                 <div class="pull-left">
@@ -54,15 +71,9 @@
                                 <label>Kode Barang</label>
                                 <input type="text" name="kode" value="{{ $data->kode ?? 'kode'}}"class="form-control" autofocus required>
                             </div>
-                            <div class="row form-group">
-                                <div class="col-12 col-md-9">
-                                    <select name="kategori_id" id="select" class="form-control">
-                                        <option value="{{ $data->kategori_id ?? 'kategori_id'}}">{{ $data->kategori->kategori}}</option>
-                                @foreach ($kate as $item)
-                                    <option value="{{$item->id}}">{{ $item->kategori }}</option>
-                                @endforeach
-                                    </select>
-                                </div>
+                            <div class="form-group">
+                                <label >Kategori</label>
+                                <input type="text"  value="{{ $data->kategori->kategori ?? 'kategori'}}" readonly class="form-control">
                             </div>        
                             <div class="form-group">
                                 <label>Merk</label>
@@ -76,11 +87,6 @@
                                 <label>Harga Beli</label>
                                 <input type="number" name="harga_beli" value="{{ $data->harga_beli ?? 'harga_beli'}}" class="form-control" autofocus required>
                             </div>
-                            <div class="form-group">
-                                <label>Stock</label>
-                                <input type="number" name="stok" value="{{ $data->stok ?? 'stok'}}" class="form-control" autofocus required>
-                            </div>
-                            
                             <button type="submit" class="btn btn-success">Save</button>
                         </form>
                     </div>

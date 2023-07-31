@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('merk');
             $table->integer('harga_jual');
             $table->integer('harga_beli');
-            $table->integer('stok');
+            $table->integer('stok')->default('0');
             $table->timestamps();
         });
     }

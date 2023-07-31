@@ -7,33 +7,16 @@ use Illuminate\Support\Facades\DB;
 use App\Models\laporan_harian;
 use App\Models\pengeluaran;
 use App\Models\Barangmasuk;
-use App\Models\kategori;
 use App\Models\produk;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
 {
-    public function index()
-    {
-        
-        $data = kategori::all(); 
-        return view('laporan.laporan',['data'=>$data]);
-
-    }
-
-    public function exportPDF()
-    {
-        $data = kategori::all();
-        $pdf =  PDF::loadView('laporan.pdf',compact('data'));
-        $pdf->setPaper('a4', 'potrait');
-
-        return $pdf->stream('Laporan Kategori',  '.pdf');
-    }
 
     public function produk_view()
     {
         
-        $data = produk::all();
+        $data = produk::paginate(10);
         return view('laporan.produk.laporan',['data'=>$data]);
 
     }
@@ -50,32 +33,39 @@ class LaporanController extends Controller
     public function masuk_view()
     {
         
-        $data = Barangmasuk::all();
+        $data = Barangmasuk::paginate(10);
         return view('laporan.masuk.laporan',['data'=>$data]);
 
     }
 
-    public function masukPDF()
+    public function masukPDF(Request $request)
     {
-        $data = Barangmasuk::all();
-        $pdf =  PDF::loadView('laporan.masuk.pdf',compact('data'));
+        $data = Barangmasuk::whereBetween('tanggal_barang', [$request->awal , $request->akhir])->get();
+        $awal = $request->awal;
+        $akhir = $request->akhir;
+        $grandtotal = $data->sum('total');
+        $pdf =  PDF::loadView('laporan.masuk.pdf',compact('data','awal','akhir', 'grandtotal'));
         $pdf->setPaper('a4', 'potrait');
-
+        
         return $pdf->stream('Laporan Barang Masuk',  '.pdf');
     }
 
     public function pengeluaran_view()
     {
         
-        $data = pengeluaran::all();
+        $data = pengeluaran::paginate(10);
         return view('laporan.keluar.laporan',['data'=>$data]);
 
     }
 
-    public function keluarPDF()
+    public function keluarPDF(Request $request)
     {
-        $data = Pengeluaran::all();
-        $pdf =  PDF::loadView('laporan.keluar.pdf',compact('data'));
+        $data = Pengeluaran::whereBetween('tanggal', [$request->awal , $request->akhir])->get();
+        return dd($data);
+        $awal = $request->awal;
+        $akhir = $request->akhir;
+        $grandtotal = $data->sum('total');
+        $pdf =  PDF::loadView('laporan.keluar.pdf',compact('data','awal','akhir','grandtotal'));
         $pdf->setPaper('a4', 'potrait');
 
         return $pdf->stream('Laporan Produk',  '.pdf');

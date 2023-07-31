@@ -66,27 +66,26 @@
 
 </head>
 
-<body class="bg-dark">
+<body >
 
-
-    <div class="sufee-login d-flex align-content-center flex-wrap">
-        <div class="container">
-            <div class="login-content">
-                <div class="login-logo">
-                    <a href="index.html">
-                        <img class="align-content" src="images/logo.png" alt="">
-                    </a>
-                </div>
-                @if($errors->any())
+    @if($errors->any())
                 @foreach($errors->all() as $err)
-                <p class="alert alert-danger">{{ $err }}</p>
+                <p class="alert alert-danger">{{ $err }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </p>
                 @endforeach
                 @endif
-                <div class="login-form">
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content" style="border-radius: 25px;
+            border: 2px solid #73AD21;">
+                <div class="login-form" style="border-radius: 25px">
                     <form action="{{ route('register.action') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label>Name <span class="text-danger">*</span></label>
+                            <label>Nama <span class="text-danger">*</span></label>
                             <input class="form-control" type="text" name="name" value="{{ old('name') }}" />
                         </div>
                          <div class="form-group">
@@ -95,18 +94,26 @@
                          </div>
                          <div class="form-group">
                             <label>Password <span class="text-danger">*</span></label>
-                            <input class="form-control" type="password" name="password" />
+                            <input class="form-control" type="password" name="password" id="id_password" />
+                            <i class="fa fa-eye" id="togglePassword" style="float: right;
+                    margin-top: -25px;
+                    position: relative;
+                    z-index: 2;"></i>
                          </div>
                          <div class="form-group">
-                            <label>Password Confirmation<span class="text-danger">*</span></label>
-                            <input class="form-control" type="password" name="password_confirm" />
+                            <label>Konfirmasi Password <span class="text-danger">*</span></label>
+                            <input class="form-control" type="password" name="password_confirm" id="id_password2" />
+                            <i class="fa fa-eye" id="togglePassword2" style="float: right;
+                    margin-top: -25px;
+                    position: relative;
+                    z-index: 2;"></i>
                          </div>
-                                    <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">Register</button>
+                                    <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Register</button>
                                     <div class="social-login-content">
                                       
                                     </div>
                                     <div class="register-link m-t-15 text-center">
-                                        <p>Sudah punya Akun? <a  href="{{ route('register') }}">Ayo Login sekarang!</a></p>
+                                        <p>Sudah punya Akun? <a  href="{{ route('login') }}" class="text text-primary">Ayo Login sekarang!</a></p>
                                     </div>
                     </form>
                 </div>
@@ -120,6 +127,29 @@
     <script src="{{ asset('style/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('style/assets/js/main.js') }}"></script>
 
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const togglePassword2 = document.querySelector('#togglePassword2');
+        const password = document.querySelector('#id_password');
+        const password2 = document.querySelector('#id_password2');
+
+        togglePassword.addEventListener('click', function (e) {
+          // toggle the type attribute
+          const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+          password.setAttribute('type', type);
+          // toggle the eye slash icon
+          this.classList.toggle('fa-eye-slash');
+      });
+
+      togglePassword2.addEventListener('click', function (e) {
+          // toggle the type attribute
+          const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+          password2.setAttribute('type', type);
+          // toggle the eye slash icon
+          this.classList.toggle('fa-eye-slash');
+      });
+      
+      </script>
 
 </body>
 

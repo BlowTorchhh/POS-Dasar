@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title class="text-center">Laporan Kategori</title>
+    <title class="text-center">Laporan Pengeluaran</title>
 </head>
 <body>
-    <h3 class="text-center" align="center">LAPORAN BARANG KELUAR</h3>
+    <h3 class="text-center" align="center">LAPORAN PENGELUARAN</h3>
+    <p class="text-center" align="center">Dari Tanggal {{ $awal }} Sampai Tanggal {{ $akhir }}</p>
     <div class="form-group">
-    <table class="table table-striped table-hover table-bordered" align="center" rules="all" border="1px" style="width:95%;">
-    </tbody>
+    <table class="table table-striped table-hover table-bordered" align="center" rules="all" border="0.1px" style="width:95%;">
+        {{ $count=$data->count(); }}
+        @if ($count >= 1)
     <thead>
         <tr>
             <th>No</th>
@@ -35,11 +37,23 @@
             <td>{{ $item->produk->merk }}</td>
             <td>{{ $item->produk->formatRupiah('harga_jual') }}</td>
             <td>{{ $item->jumlah_keluar }}</td>
-            <input type="hidden" value="{{ $total = $item->produk->harga_jual * $item->jumlah_keluar }}">
-            <td>{{ formatRupiah($total) }}</td>
+            <td>{{ formatRupiah($item->total) }}</td>
+        </tr>
     @endforeach
-    </tbody> 
+    </tbody>
+    <tr>
+        <td colspan="8">
+            <h5 class="text-left" align="center"> Grand Total</h5>
+        </td>
+        <td>
+            <h5 class="text-right" align="center"> {{ formatRupiah($grandtotal) }}</h5>
+        </td>
+    </tr>
+    @endif
     </table>
     </div>
+    @if ($count == 0)
+            <h4 class="text-center" align="center"> Tidak ada data</h4>
+        @endif
 </body>
 </html>

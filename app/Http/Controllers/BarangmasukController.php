@@ -11,8 +11,9 @@ class BarangmasukController extends Controller
 {
     public function index()
     {  
-        $data = Barangmasuk::with('kategori','produk')->paginate(10); 
-        return view('Barang-masuk/Barang-masuk',['data'=>$data]);
+        $data = Barangmasuk::with('kategori','produk')->paginate(10);
+        $count = Barangmasuk::with('kategori','produk')->count();
+        return view('Barang-masuk/Barang-masuk',['data'=>$data],compact('count'));
     }
 
     public function add()
@@ -23,16 +24,32 @@ class BarangmasukController extends Controller
     }
     public function addProcess(Request $request)
     {
+        try {
+            $produk = produk::all($produk = ['*'])->where('id', $request->produk_id);
+            $valid = DB::table('barang_masuk')->where(['tanggal_barang' => $request->tanggal_barang , 'produk_id'=> $request->produk_id])->get();
+            $count = $valid->count();
+            if ($count >= 1) {
+                foreach ($produk as $item);
+                foreach ($valid as $barang);
+                DB::table('barang_masuk')->where('id', $barang->id)
+            ->update([
+                'jumlah'=>$request->jumlah + $barang->jumlah,
+                'total'=>($request->jumlah + $barang->jumlah) * $item->stok,
+            ]);
 
-        $produk = produk::all($produk = ['*'])->where('id', $request->produk_id);
-
+            DB::table('produk')->where('id', $request->produk_id)
+            ->update([
+            'stok' => $item->stok + ($request->jumlah + $item->jumlah),
+            ]);
+            return redirect('Barang-masuk/Barang-masuk')->with('status', 'Barang masuk Berhasil digabungkan!');
+            }
         foreach ($produk as $item);
 
         DB::table('barang_masuk')->insert([
             'tanggal_barang'=> $request->tanggal_barang,
             'produk_id' => $request->produk_id,
             'jumlah'=>$request->jumlah,
-            
+            'total'=>$request->jumlah * $item->harga_beli,
           
         ]);
 
@@ -40,6 +57,10 @@ class BarangmasukController extends Controller
         ->update([
         'stok' => $item->stok + $request->jumlah,
         ]);
+        } catch (\Throwable $th) {
+            return redirect('Barang-masuk/Barang-masuk-add')->with('error', 'Mohon pilih Produk!');
+        }
+        
         
         return redirect('Barang-masuk/Barang-masuk')->with('status', 'Barang-masuk Berhasil ditambah!');
     }
@@ -62,7 +83,7 @@ class BarangmasukController extends Controller
                 'tanggal_barang'=> $request->tanggal_barang,
                 'produk_id' => $request->produk_id,
                 'jumlah'=>$request->jumlah,
-               
+                'total'=>$request->jumlah * $item->stok,
             ]);
 
             DB::table('produk')->where('id', $request->produk_id)
@@ -76,13 +97,12 @@ class BarangmasukController extends Controller
 
         $produk = produk::all($produk = ['*'])->where('id', $request->produk_id);
 
-        foreach ($produk as $item);
-
-        DB::table('produk')->where('id', $request->produk_id)
-        ->update([
-        'stok' => $item->stok - $request->jumlah,
-        ]);
-        
+        foreach ($produk as $item){
+            DB::table('produk')->where('id', $request->produk_id)
+            ->update([
+            'stok' => $item->stok - $request->jumlah,
+            ]);
+        }
         DB::table('barang_masuk')->where('id', $id)->delete();
         return redirect('Barang-masuk/Barang-masuk')->with('status', 'Barang masuk Berhasil dihapus!');
     }

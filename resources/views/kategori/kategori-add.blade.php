@@ -27,7 +27,15 @@
 <div class="content mt-3">
 
     <div class="animated fadeIn">
-
+        @if($errors->any())
+        @foreach($errors->all() as $err)
+        <p class="alert alert-danger">{{ $err }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </p>
+        @endforeach
+        @endif
 
         <div class="card">
             <div class="card-header">

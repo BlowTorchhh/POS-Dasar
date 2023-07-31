@@ -1,4 +1,9 @@
 @extends('main')
+@section('head')
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+@endsection
+
 @section('tittle', 'Dashboard')
 
 @section('breadcrumbs')
@@ -27,7 +32,16 @@
 <div class="content mt-3">
 
     <div class="animated fadeIn">
-
+        @if (session('error'))
+        <div class="col-sm-12">
+            <div class="alert  alert-danger alert-dismissible fade show" role="alert">
+                <span class="badge badge-pill badge-success"></span> {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        @endif
 
         <div class="card">
             <div class="card-header">
@@ -56,8 +70,8 @@
                             <div class="row form-group">
                                 <div class="col-12 col-md-9">
                                     <label >Pilih Kategori</label>
-                                    <select name="kategori_id" id="select" class="form-control">
-                                        <option hidden value="disabled value">Pilih kategori</option>
+                                    <select name="kategori_id" id="select" class="form-control chosen">
+                                        <option hidden value="disabled value" style="display: none">Pilih kategori</option>
                                 @foreach ($kate as $item)
                                     <option value="{{$item->id}}">{{ $item->kategori }}</option>
                                 @endforeach
@@ -76,10 +90,6 @@
                                 <label>Harga Beli</label>
                                 <input type="number" name="harga_beli" class="form-control" autofocus required>
                             </div>
-                            <div class="form-group">
-                                <label>Stock</label>
-                                <input type="number" name="stok" class="form-control" autofocus required>
-                            </div>
                             
                             <button type="submit" class="btn btn-success">Save</button>
                         </form>
@@ -90,5 +100,10 @@
     </div>
         
 </div> <!-- .content -->
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+<script >
+    $(".chosen").chosen();
+</script>
 @endsection

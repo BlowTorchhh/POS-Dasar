@@ -70,7 +70,7 @@
 
 </head>
 
-<body class="bg-dark">
+<body >
 
 
     <div class="sufee-login d-flex align-content-center flex-wrap">
@@ -85,13 +85,18 @@
             </div>
         </div>
         @endif
-            <div class="login-content">
-                <div class="login-logo">
-                    <a href="index.html">
-                        <img class="align-content" src="images/logo.png" alt="">
-                    </a>
-                </div>
-                <div class="login-form">
+        @if($errors->any())
+            @foreach($errors->all() as $err)
+                <p class="alert alert-danger">{{ $err }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </p>
+            @endforeach
+        @endif
+            <div class="login-content" style="border-radius: 25px;
+            border: 2px solid #73AD21;">
+                <div class="login-form" style="border-radius: 25px;">
                     <form action="{{ route('login.action') }}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -100,20 +105,18 @@
                         </div>
                          <div class="form-group">
                             <label>Password <span class="text-danger">*</span></label>
-                            <input class="form-control" type="password" name="password" value="{{ old('password') }}"/>
-                            @if($errors->any())
-                                @foreach($errors->all() as $err)
-                                    <p class="alert alert-danger">{{ $err }}</p>
-                            @endforeach
-                            @endif
+                            <input class="form-control" type="password" name="password" id="id_password" value="{{ old('password') }}"/>
+                            <i class="fa fa-eye" id="togglePassword" style="float: right;
+                    margin-top: -25px;
+                    position: relative;
+                    z-index: 2;"></i>
                          </div>
-                                    <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">Login</button>
-                                    <div class="social-login-content">
-                                      
+                            <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Login</button>
+                                <div class="social-login-content">
                                     </div>
-                                    <div class="register-link m-t-15 text-center">
-                                        <p>Belum punya akun? <a  href="{{ route('register') }}">Register sekarang!</a></p>
-                                    </div>
+                            <div class="register-link text-center">
+                                <p>Belum punya akun? <a  href="{{ route('register') }}" class="text text-primary">Register sekarang!</a></p>
+                            </div>
                     </form>
                 </div>
             </div>
@@ -126,7 +129,18 @@
     <script src="{{ asset('style/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('style/assets/js/main.js') }}"></script>
 
-
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#id_password');
+      
+        togglePassword.addEventListener('click', function (e) {
+          // toggle the type attribute
+          const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+          password.setAttribute('type', type);
+          // toggle the eye slash icon
+          this.classList.toggle('fa-eye-slash');
+      });
+      </script>
 </body>
 
 </html>
